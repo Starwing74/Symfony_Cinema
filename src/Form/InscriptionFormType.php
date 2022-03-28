@@ -19,13 +19,11 @@ class InscriptionFormType extends AbstractType
             ->add('Nom', TextType::class, ['label' => 'Name :'])
             ->add('Mail', EmailType::class, ['label' => 'Mail :'])
             ->add('Password', PasswordType::class, ['label' => 'Password :'])
-            ->add('answer1',ChoiceType::class,
+            ->add('Civilite',ChoiceType::class,
                 array('choices' => array(
-                    'answer1' => '1',
-                    'answer2' => '2',
-                    'answer3' => '3',
-                    'answer4' => '4'),
-                    'choices_as_values' => true,'multiple'=>false,'expanded'=>true));
+                    'Madame' => '1',
+                    'Monsieur' => '2'),
+                    'multiple'=>false,'expanded'=>true));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

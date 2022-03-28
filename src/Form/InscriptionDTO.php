@@ -4,6 +4,8 @@ namespace App\Form;
 
 class InscriptionDTO
 {
+    public string $Civilite = "";
+
     #[Assert\Length(min: 3)]
     public string $Prenom;
 
