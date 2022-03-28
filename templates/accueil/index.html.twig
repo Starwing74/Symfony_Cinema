@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccueilController!{% endblock %}
+
+{% block body %}
+<style>
+    .film:hover{
+        width: 440px;
+        height: 540px;
+    }
+
+    .film.lazy-load.is-loaded {
+        opacity: 1;
+    }
+
+    .category{
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 1.75rem;
+        font-weight: 300;
+        line-height: 2.5rem;
+        color: #a1a4a7;
+        margin-right: 1rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .category:hover{
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 1.75rem;
+        line-height: 2.5rem;
+        margin-right: 1rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+        color: #1c2129;
+        font-weight: 400;
+    }
+</style>
+
+<div class="example-wrapper">
+    <h1>Bienvenue au cinema de grenoble</h1>
+    <a href="{{ path('app_inscription') }}">Inscription</a>
+    <a href="{{ path('app_connection') }}">Connection</a>
+        <a class="category" href="{{ path('app_accueil')}}">Tout</a>
+    {% for Category in Category %}
+        <a class="category" href="{{ path('category', { id: Category.id})}}">{{ Category.type }}</a>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_rest(form) }}
+    <input type="submit" value="Valider" />
+    {{ form_end(form) }}
+
+    {% for Film in Films %}
+        <h1>{{ Film.name }}</h1>
+        <div>
+            <a href="{{ path('ResumerFilm', { id: Film.id})}})}}">
+                <img class="film" src="{{ Film.image }}">
+            </a>
+            <button><a href="{{ Film.bandeAnnonce }}">Bande annonce</a></button>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

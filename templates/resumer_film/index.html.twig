@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ResumerFilmController!{% endblock %}
+
+{% block body %}
+<style>
+    .button-retour{
+        width: 20px;
+        height: 20px;
+    }
+</style>
+
+<div class="example-wrapper">
+    <h1>Resumer</h1>
+
+    <a href="{{ path('app_accueil')}}">
+        <img class="button-retour" src="https://icones.pro/wp-content/uploads/2021/02/fleches-iconela-gauche-orange.png">
+    </a>
+
+    {% for FilmResumer in FilmResumer %}
+    <center>
+        <h1>{{ FilmResumer.resumer }}</h1>
+        <img src="{{ FilmResumer.image }}">
+    </center>
+    {% endfor %}
+
+</div>
+{% endblock %}
