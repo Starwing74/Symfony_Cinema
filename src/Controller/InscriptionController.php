@@ -60,7 +60,7 @@ class InscriptionController extends AbstractController
                 $user->setLastLogin(new \DateTime());
                 $userRepository->save($user);
 
-                return $this->redirectToRoute("app_connection");
+                return $this->redirectToRoute("login");
             }
         }
 
