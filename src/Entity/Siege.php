@@ -25,6 +25,15 @@ class Siege
     #[ORM\Column(type: 'string', length: 255)]
     private $colonne;
 
+    #[ORM\ManyToOne(targetEntity: Salle::class)]
+    private $salle;
+
+    #[ORM\ManyToOne(targetEntity: Seance::class)]
+    private $seance;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +83,42 @@ class Siege
     public function setColonne(string $colonne): self
     {
         $this->colonne = $colonne;
+
+        return $this;
+    }
+
+    public function getSalle(): ?Salle
+    {
+        return $this->salle;
+    }
+
+    public function setSalle(?Salle $salle): self
+    {
+        $this->salle = $salle;
+
+        return $this;
+    }
+
+    public function getSeance(): ?Seance
+    {
+        return $this->seance;
+    }
+
+    public function setSeance(?Seance $seance): self
+    {
+        $this->seance = $seance;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

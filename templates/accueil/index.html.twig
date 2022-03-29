@@ -48,6 +48,12 @@
 
 <div class="example-wrapper">
     <h1>Bienvenue au cinema de grenoble</h1>
+
+    {% if app.user %}
+        <p>bienvenue {{ app.user.name }} !</p>
+        <a href="{{ path('logout') }}">deconnection</a>
+    {% endif %}
+
     <a href="{{ path('app_inscription') }}">Inscription</a>
     <a href="{{ path('login') }}">Connection</a>
         <a class="category" href="{{ path('app_accueil')}}">Tout</a>
@@ -67,6 +73,7 @@
                 <img class="film" src="{{ Film.image }}">
             </a>
             <button><a href="{{ Film.bandeAnnonce }}">Bande annonce</a></button>
+            <a href="{{ path('app_horaire_film', {id: Film.id}) }}">Voir les séances</a>
         </div>
     {% endfor %}
 </div>

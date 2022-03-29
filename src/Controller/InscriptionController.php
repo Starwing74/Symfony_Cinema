@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\InscriptionFormType;
 use App\Form\InscriptionDTO;
@@ -15,7 +16,7 @@ use App\Form\InscriptionDTO;
 class InscriptionController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(\Symfony\Component\HttpFoundation\Request $request, MailerInterface $mailer, UserRepository $userRepository): Response
+    public function index(UserPasswordHasherInterface $userPasswordHasher,\Symfony\Component\HttpFoundation\Request $request, MailerInterface $mailer, UserRepository $userRepository): Response
     {
         $dto = new InscriptionDTO();
 
@@ -44,17 +45,15 @@ class InscriptionController extends AbstractController
                     ->to($dto->Mail)
                     ->subject('Creation de votre compte')
                     ->text(
-                        'Merci' . $Civilite . " " . $dto->Nom . 'pour avoir créer notre compte!' . '
-                          Vaut information ce sont enregistrer de n otre base de donnée' . '
-                          AdresseMail: ' . $dto->Mail . '
-                          Password: ' . $dto->Password);
+                        'Merci ' . $Civilite . " " . $dto->Nom . ' pour avoir créer notre compte!' . 'Vaut information ce sont enregistrer de n otre base de donnée' . '
+                          (AdresseMail: ' . $dto->Mail . ' Password: ' . $dto->Password . ')');
 
                 $mailer->send($email);
 
                 $user = new User();
                 $user->setName($dto->Prenom);
                 $user->setLastName($dto->Nom);
-                $user->setPassword($dto->Password);
+                $user->setPassword($userPasswordHasher->hashPassword($user, $dto->Password));
                 $user->setMail($dto->Mail);
                 $user->setRole("client");
                 $user->setLastLogin(new \DateTime());

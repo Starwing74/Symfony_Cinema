@@ -10,37 +10,42 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SalleSeanceController extends AbstractController
 {
-    #[Route('/salle/seance', name: 'app_salle_seance')]
-    public function index(SiegeRepository $siegeRepository): Response
+    #[Route('place/salle{salle}/seance{seance}', name: 'app_salle_seance')]
+    public function index($salle,$seance,SiegeRepository $siegeRepository): Response
     {
-
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
-            'siege' => $siegeRepository->findAll(),
+            'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
+            'salle' => $salle,
+            'seance' => $seance,
         ]);
     }
 
-    #[Route('/salle/seance/{numeroSiege}', name: 'selectPlace')]
-    public function selectPlace(SiegeRepository $siegeRepository, Siege $siege): Response
+    #[Route('place/salle{salle}/seance{seance}/siege{numeroSiege}', name: 'selectPlace')]
+    public function selectPlace($salle,$seance,SiegeRepository $siegeRepository, Siege $siege): Response
     {
         $siege->setStatus("en cour");
         $siegeRepository->save($siege);
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
-            'siege' => $siegeRepository->findAll()
+            'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
+            'salle' => $salle,
+            'seance' => $seance,
         ]);
     }
 
-    #[Route('/salle/seance/remove/{numeroSiege}', name: 'removeSelectPlace')]
-    public function RemoveSelectPlace(SiegeRepository $siegeRepository, Siege $siege): Response
+    #[Route('place/salle{salle}/seance{seance}/remove/siege{numeroSiege}', name: 'removeSelectPlace')]
+    public function RemoveSelectPlace($salle,$seance,SiegeRepository $siegeRepository, Siege $siege): Response
     {
         $siege->setStatus("libre");
         $siegeRepository->save($siege);
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
-            'siege' => $siegeRepository->findAll()
+            'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
+            'salle' => $salle,
+            'seance' => $seance,
         ]);
     }
 }

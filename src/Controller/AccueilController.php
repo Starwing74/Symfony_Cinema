@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController
 {
-    #[Route('/accueil', name: 'app_accueil')]
+    #[Route('/', name: 'app_accueil')]
     public function index(\Symfony\Component\HttpFoundation\Request $request, CategoryRepository $categoryRepository, FilmRepository $filmRepository): Response
     {
         $dto = new FilmSearchDTO();
