@@ -19,7 +19,7 @@ class Film
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $image;
 
-    #[ORM\Column(type: 'string', length: 20000, nullable: true)]
+    #[ORM\Column(type: 'text', length: 20000, nullable: true)]
     private $resumer;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
