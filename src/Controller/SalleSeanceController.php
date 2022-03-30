@@ -13,72 +13,59 @@ class SalleSeanceController extends AbstractController
     #[Route('place/salle{salle}/seance{seance}', name: 'app_salle_seance')]
     public function index($salle,$seance, \Symfony\Component\HttpFoundation\Request $request,SiegeRepository $siegeRepository): Response
     {
+
         $session = $request->getSession();
+        $placeAcheter = $session->get('place', []);
 
-        $sessionSiege = $session->get('place', []);
-
-        $sessionSiege = $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]);
-
-        $session->set('place',$sessionSiege);
+        $siege = $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]);
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
-            'siege' => $sessionSiege ,
+            'siege' => $siege ,
             'salle' => $salle,
             'seance' => $seance,
+            'siegesectedbyuser' => $placeAcheter,
+            'break' => false
         ]);
     }
 
     #[Route('place/salle{salle}/seance{seance}/siege{numeroSiege}', name: 'selectPlace')]
     public function selectPlace($salle,$seance,$numeroSiege, \Symfony\Component\HttpFoundation\Request $request,SiegeRepository $siegeRepository, Siege $siege): Response
     {
-        $siege->setStatus("en cour");
-        $siegeRepository->save($siege);
-
         $session = $request->getSession();
 
-        $session->clear();
-        $placeAcheter = $session->get('siege', []);
+        $placeAcheter = $session->get('place', []);
 
-        $session->set('siege',$placeAcheter);
+        $placeAcheter[$numeroSiege] = $numeroSiege;
 
-        dd($placeAcheter);
+        $session->set('place',$placeAcheter);
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
             'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
             'salle' => $salle,
             'seance' => $seance,
-            'placeencour' => $placeAcheter
+            'siegesectedbyuser' => $placeAcheter
         ]);
     }
 
     #[Route('place/salle{salle}/seance{seance}/remove/siege{numeroSiege}', name: 'removeSelectPlace')]
     public function RemoveSelectPlace($salle,$seance,$numeroSiege, \Symfony\Component\HttpFoundation\Request $request,SiegeRepository $siegeRepository, Siege $siege): Response
     {
-        $siege->setStatus("libre");
-        $siegeRepository->save($siege);
-
         $session = $request->getSession();
 
-        $placeAcheter = $session->get('placeacheter', []);
-        $i = 0;
-        foreach ($placeAcheter as $placeAcheter)
-        {
-            if($placeAcheter == $numeroSiege)
-            {
-                unset($placeAcheter[$i]);
-            }
-            $i++;
-        }
+        $placeAcheter = $session->get('place', []);
 
-        $session->set('placeacheter',$placeAcheter);
+        unset($placeAcheter[$numeroSiege]);
+
+        $session->set('place',$placeAcheter);
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
             'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
             'salle' => $salle,
             'seance' => $seance,
+            'siegesectedbyuser' => $placeAcheter
         ]);
     }
 }

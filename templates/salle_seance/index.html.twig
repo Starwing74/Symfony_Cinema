@@ -28,21 +28,28 @@
 
 <div class="example-wrapper">
     <h1>Salle de Séance</h1>
-
     {% for siege in siege %}
-        {% if siege.status == "prit" %}
-            <a>
-                <img class="prit" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </a>
-            {% elseif siege.status == "en cour" %}
-                <a href="{{ path('removeSelectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
-                    <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-                </a>
+        {% if siegesectedbyuser %}
+            {% set continue = false %}
+            {% for siegesectedbyuser in siegesectedbyuser %}
+                {% if siegesectedbyuser == siege.numeroSiege %}
+                    <a href="{{ path('removeSelectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
+                        <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                    </a>
+                    {% set continue = true %}
+                {% endif %}
+                {% if siegesectedbyuser != siege.numeroSiege and continue == false %}
+                    <a href="{{ path('selectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
+                        {{ siege.numeroSiege }}
+                    </a>
+                    {% set continue = true %}
+                {% endif %}
+            {% endfor %}
         {% else %}
             <a href="{{ path('selectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
                 <img src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
             </a>
-        {% endif %}
+            {% endif %}
         {% if siege.colonne == "7" %}
             <br>
         {% endif %}

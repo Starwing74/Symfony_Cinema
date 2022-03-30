@@ -20,7 +20,7 @@ class PayementController extends AbstractController
 
         $session = $request->getSession();
 
-        $placeAcheter = $session->get('placeacheter', []);
+        $placeAcheter = $session->get('place', []);
 
         dd($placeAcheter);
 
