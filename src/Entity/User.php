@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\CarteBancaireRepository;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,6 +35,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'datetime')]
     private $lastLogin;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: CarteBancaire::class, orphanRemoval: true)]
+    private $carteBancaires;
+
+    public function __construct()
+    {
+        $this->carteBancaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,5 +130,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->mail;
         // TODO: Implement getUserIdentifier() method.
+    }
+
+    /**
+     * @return Collection<int, CarteBancaire>
+     */
+    public function getCarteBancaires(CarteBancaireRepository $carteBancaireRepository): Collection
+    {
+        return new ArrayCollection($carteBancaireRepository->findBy(array('user' => $this)));
+    }
+
+    public function addCarteBancaire(CarteBancaire $carteBancaire): self
+    {
+        if (!$this->carteBancaires->contains($carteBancaire)) {
+            $this->carteBancaires[] = $carteBancaire;
+            $carteBancaire->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarteBancaire(CarteBancaire $carteBancaire): self
+    {
+        if ($this->carteBancaires->removeElement($carteBancaire)) {
+            // set the owning side to null (unless already changed)
+            if ($carteBancaire->getUserId() === $this) {
+                $carteBancaire->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }

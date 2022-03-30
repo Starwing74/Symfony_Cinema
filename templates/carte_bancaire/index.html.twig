@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CarteBancaireController!{% endblock %}
+
+{% block body %}
+    <h1>Toutes vos cartes</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Numéro</th>
+            <th>Expiration</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for carte in cartes %}
+            <tr>
+                <td>{{ carte.getNumeroCarteDiscret }}</td>
+                <td>{{ carte.getDateExpirationString }}</td>
+                <td>
+                    {{ include('carte_bancaire/partials/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Pas encore de carte</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('app_carte_bancaire.add') }}">Ajouter une carte</a>
+{% endblock %}
