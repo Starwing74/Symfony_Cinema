@@ -12,17 +12,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class PayementController extends AbstractController
 {
     #[Route('/payement/salle{salle}/seance{seance}', name: 'app_payement')]
-    public function index($salle, $seance, AuthenticationUtils $authentificationUtils, SiegeRepository $siegeRepository): Response
+    public function index($salle, $seance, \Symfony\Component\HttpFoundation\Request $request, AuthenticationUtils $authentificationUtils, SiegeRepository $siegeRepository): Response
     {
         $siegeEnCour = $siegeRepository->findBy(['status'=>"en cour",'salle'=>$salle,'seance'=>$seance]);
 
         $total = 0;
 
-        /** @var User $user */
-        $user = $this->getUser();
-        if ($user) {
-            return $this->redirectToRoute('app_payement');
-        }
+        $session = $request->getSession();
+
+        $placeAcheter = $session->get('place', []);
+
+        dd($placeAcheter);
 
         foreach ($siegeEnCour as $nbreDeSiege)
         {
@@ -57,7 +57,9 @@ class PayementController extends AbstractController
             'total' => $total,
             'connected' => $connected,
             'last_username' => $lastUserName,
-            'error' => $errors
+            'error' => $errors,
+            'salle' => $salle,
+            'seance' => $seance,
         ]);
     }
 }

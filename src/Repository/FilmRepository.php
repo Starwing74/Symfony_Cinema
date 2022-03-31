@@ -33,6 +33,11 @@ class FilmRepository extends ServiceEntityRepository
         }
     }
 
+    public function save(Film $entity): void {
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException
