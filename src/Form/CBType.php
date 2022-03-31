@@ -19,7 +19,6 @@ class CBType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new Length(['min' => 16 , 'max' => 16]),
-
                 ]
             ])
             ->add('cvc', TextType::class, [

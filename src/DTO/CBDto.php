@@ -24,7 +24,6 @@ class CBDto extends AbstractDto {
      * @param CarteBancaire $cb
      */
     public function setFromEntity(AbstractEntity $cb): void {
-        $this->date_expiration = $cb->getDateExpiration();
     }
 
     /**

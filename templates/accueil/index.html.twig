@@ -50,7 +50,7 @@
     <h1>Bienvenue au cinema de grenoble</h1>
 
     {% if app.user %}
-        <p>bienvenue <a href="{{ path('app_carte_bancaire') }}">{{ app.user.name }}</a> !</p>
+        <p>bienvenue {{ app.user.name }} !</p>
         <a href="{{ path('logout') }}">deconnection</a>
     {% endif %}
 

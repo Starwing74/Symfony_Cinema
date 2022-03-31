@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\DTO\CBDto;
 use App\Repository\CarteBancaireRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\DTO\AbstractDto;
 
@@ -29,9 +31,13 @@ class CarteBancaire extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
+    #[ORM\OneToMany(mappedBy: 'carte', targetEntity: Reservation::class)]
+    private $reservations;
+
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): int
@@ -104,5 +110,35 @@ class CarteBancaire extends AbstractEntity
         $this->setNumeroCarte($dto->numero_carte);
         $this->setCvc($dto->cvc);
         $this->setDateExpiration($dto->date_expiration);
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setCarte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getCarte() === $this) {
+                $reservation->setCarte(null);
+            }
+        }
+
+        return $this;
     }
 }
