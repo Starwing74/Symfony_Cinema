@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PageAdministrateurController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    Roles: {{ app.user.name }}
+    {% if Role != "admin" %}
+        <h1>Cette page est réserver à l'administrateur</h1>
+    {% elseif Role == "admin" %}
+        <h1>Bienvenue Administrateur</h1>
+
+        Ratouter un film?
+
+        {{ form_start(form) }}
+        {{ form_rest(form) }}
+        <input type="submit" value="Valider" />
+        {{ form_end(form) }}
+
+
+        <table>
+            <thead>
+            <tr>
+                <td>Nom:</td>
+                <td>Image jpg</td>
+                <td>Durer du film</td>
+                <td>Directeur</td>
+                <td>Bande annonce lien du yt</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for film in film %}
+                <tr style="border-color: black">
+                    <td>{{ film.name }}:</td>
+                    <td>{{ film.image }}</td>
+                    <td>{{ film.durer }}</td>
+                    <td>{{ film.directeur }}</td>
+                    <td>{{ film.bandeAnnonce }}</td>
+                    <td><a href="{{ path('page_administrateur_edit', {id: film.id}) }}">modifier</a></td>
+                    <td><a href="{{ path('page_administrateur_delete', {id: film.id}) }}) }}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}
