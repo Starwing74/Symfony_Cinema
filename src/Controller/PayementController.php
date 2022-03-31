@@ -31,11 +31,9 @@ class PayementController extends AbstractController
         $reservationseance = [
             'salle' => $salle,
             'seance' => $seance,
-            'placereserver ' => $placeSelect,
+            'placesReservees' => $placeSelect,
             'prixTotal' => $total
         ];
-
-        dd($reservationseance);
 
         $session->set('reservationSeance',$reservationseance);
 
