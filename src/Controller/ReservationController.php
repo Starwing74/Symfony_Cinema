@@ -5,12 +5,18 @@ namespace App\Controller;
 use App\DTO\ReservationDto;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
+use App\Repository\SalleRepository;
+use App\Repository\SeanceRepository;
+use App\Repository\SiegeRepository;
+use App\Repository\UserRepository;
 use App\Services\ReservationService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route("/reservation")]
@@ -36,7 +42,7 @@ class ReservationController extends AbstractController
     }
 
     #[Route("/complete", name: "reservation.complete", methods: ["GET", "POST"])]
-    public function completerReservation(Request $request): Response
+    public function completerReservation(Request $request, SiegeRepository $siegeRepository, SalleRepository $salleRepository, SeanceRepository $seanceRepository, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $reservationDto = new ReservationDto();
 
@@ -44,21 +50,37 @@ class ReservationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($request->getSession());
-            $data = 'test'; // DETERMINER COMMENT PASSER DE LA DATA DEPUIS LE TUNNEL
+            $session = $request->getSession();
+            $data = $session->get('reservationSeance', []);
             $reservation = $this->reservationService->createNewReservation($reservationDto, $data);
 
-            $siegeRepository = $this->entityManager->getRepository('App\Entity\Siege');
-            foreach ($data->sieges as $siege){
+            foreach ($data['placesReservees'] as $siegeName){
+                $siege = $siegeRepository->findOneBy([
+                    'numeroSiege' => $siegeName,
+                    'salle' => $salleRepository->find($data['salle']),
+                    'seance' => $seanceRepository->find($data['seance'])
+                ]);
                 $reservation->addSiege($siege);
                 $siege->setStatus('pris');
+                $user_id = $this->getUser()->getId();
+                $user = $userRepository->find($user_id);
+                $siege->setUser($user);
                 $siegeRepository->save($siege);
             }
 
+            $email = (new Email())
+                ->from('cinemagrenoble@gmail.com')
+                ->to($this->getUser()->getMail())
+                ->subject('Confirmation de réservation')
+                ->text('Test');
+
+            $session->clear();
+
+            $mailer->send($email);
+
             $this->addFlash('success', 'Reservation faite!');
 
-            return $this->redirectToRoute('reservation.recap', [
-                'reservation_data' => $reservation
+            return $this->redirectToRoute('app_accueil', [
             ]);
         }
 
