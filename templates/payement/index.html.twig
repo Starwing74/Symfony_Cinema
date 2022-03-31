@@ -36,11 +36,13 @@
         <a href="{{ path('app_salle_seance', {salle: salle, seance: seance})}}">Return</a>
     {% else %}
         {% for siege in siege %}
-            <p>{{ siege.numeroSiege }} 15 euro</p>
+            <p>{{ siege }} 15 euro</p>
         {% endfor %}
     {% endif %}
 
     <h1>{{ total }} euro</h1>
+
+    {#<a href="{{ path('carteBancaire') }}">procéder au payment</a>#}
 
 </div>
 {% endblock %}

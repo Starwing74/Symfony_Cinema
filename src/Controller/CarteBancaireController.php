@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/carte_bancaire")]
+#[Route("/carte_bancaire", name: "carteBancaire")]
 class CarteBancaireController extends AbstractController
 {
     private CBService $cbService;
@@ -57,7 +57,7 @@ class CarteBancaireController extends AbstractController
             $this->addFlash('error', 'Les informations entrées sont erronées ou la carte n\'est plus valide');
         }
 
-        return $this->render('carte_bancaire/add.html.twig', [
+        return $this->render('carte_bancaire/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

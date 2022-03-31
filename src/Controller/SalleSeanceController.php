@@ -15,17 +15,25 @@ class SalleSeanceController extends AbstractController
     {
 
         $session = $request->getSession();
-        $placeAcheter = $session->get('place', []);
+        $placeSelect = $session->get('place', []);
 
         $siege = $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]);
+
+        foreach ($siege as $siegetotal){
+            if(!empty(array_filter($placeSelect, function
+            ($place) use($siegetotal) {
+                return $place===$siegetotal->getNumeroSiege();
+            })))
+            {
+                $siegetotal->setStatus("en cour");
+            }
+        }
 
         return $this->render('salle_seance/index.html.twig', [
             'controller_name' => 'SalleSeanceController',
             'siege' => $siege ,
             'salle' => $salle,
             'seance' => $seance,
-            'siegesectedbyuser' => $placeAcheter,
-            'break' => false
         ]);
     }
 
@@ -34,19 +42,15 @@ class SalleSeanceController extends AbstractController
     {
         $session = $request->getSession();
 
-        $placeAcheter = $session->get('place', []);
+        $placeSelect = $session->get('place', []);
 
-        $placeAcheter[$numeroSiege] = $numeroSiege;
+        $placeSelect[$numeroSiege] = $numeroSiege;
 
-        $session->set('place',$placeAcheter);
+        $siegetotal = $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]);
 
-        return $this->render('salle_seance/index.html.twig', [
-            'controller_name' => 'SalleSeanceController',
-            'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
-            'salle' => $salle,
-            'seance' => $seance,
-            'siegesectedbyuser' => $placeAcheter
-        ]);
+        $session->set('place',$placeSelect);
+
+        return $this->redirectToRoute("app_salle_seance", ['salle'=> $salle, 'seance'=> $seance]);
     }
 
     #[Route('place/salle{salle}/seance{seance}/remove/siege{numeroSiege}', name: 'removeSelectPlace')]
@@ -54,18 +58,12 @@ class SalleSeanceController extends AbstractController
     {
         $session = $request->getSession();
 
-        $placeAcheter = $session->get('place', []);
+        $placeSelect = $session->get('place', []);
 
-        unset($placeAcheter[$numeroSiege]);
+        unset($placeSelect[$numeroSiege]);
 
-        $session->set('place',$placeAcheter);
+        $session->set('place',$placeSelect);
 
-        return $this->render('salle_seance/index.html.twig', [
-            'controller_name' => 'SalleSeanceController',
-            'siege' => $siegeRepository->findBy(['salle'=>$salle, 'seance'=>$seance]),
-            'salle' => $salle,
-            'seance' => $seance,
-            'siegesectedbyuser' => $placeAcheter
-        ]);
+        return $this->redirectToRoute("app_salle_seance", ['salle'=> $salle, 'seance'=> $seance]);
     }
 }

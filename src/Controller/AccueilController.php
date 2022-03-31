@@ -81,4 +81,10 @@ class AccueilController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/accueil/like/film{idfilm}/user{iduser}', name: 'likefilm')]
+    public function likefilm($idfilm, $iduser): Response
+    {
+        dd($idfilm . " " . $iduser);
+    }
 }

@@ -74,6 +74,9 @@
             </a>
             <button><a href="{{ Film.bandeAnnonce }}">Bande annonce</a></button>
             <a href="{{ path('app_horaire_film', {id: Film.id}) }}">Voir les séances</a>
+            {% if app.user %}
+                <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">like</a>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

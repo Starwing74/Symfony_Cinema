@@ -33,6 +33,11 @@ class FilmRepository extends ServiceEntityRepository
         }
     }
 
+    public function delete(Film $entity): void {
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
     public function save(Film $entity): void {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();

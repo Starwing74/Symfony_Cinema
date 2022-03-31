@@ -14,20 +14,30 @@ class PayementController extends AbstractController
     #[Route('/payement/salle{salle}/seance{seance}', name: 'app_payement')]
     public function index($salle, $seance, \Symfony\Component\HttpFoundation\Request $request, AuthenticationUtils $authentificationUtils, SiegeRepository $siegeRepository): Response
     {
-        $siegeEnCour = $siegeRepository->findBy(['status'=>"en cour",'salle'=>$salle,'seance'=>$seance]);
 
         $total = 0;
 
         $session = $request->getSession();
 
-        $placeAcheter = $session->get('place', []);
+        $placeSelect = $session->get('place', []);
 
-        dd($placeAcheter);
-
-        foreach ($siegeEnCour as $nbreDeSiege)
+        foreach ($placeSelect as $nbreDeSiege)
         {
             $total += 15;
         }
+
+        $reservationseance = $session->get('reservationSeance', []);
+
+        $reservationseance = [
+            'salle' => $salle,
+            'seance' => $seance,
+            'placereserver ' => $placeSelect,
+            'prixTotal' => $total
+        ];
+
+        dd($reservationseance);
+
+        $session->set('reservationSeance',$reservationseance);
 
         $this->getUser();
 
@@ -53,7 +63,7 @@ class PayementController extends AbstractController
 
         return $this->render('payement/index.html.twig', [
             'controller_name' => 'PayementController',
-            'siege' => $siegeRepository->findBy(['status'=>"en cour",'salle'=>$salle,'seance'=>$seance]),
+            'siege' => $placeSelect,
             'total' => $total,
             'connected' => $connected,
             'last_username' => $lastUserName,
