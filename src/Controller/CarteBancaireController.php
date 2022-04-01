@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/carte_bancaire", name: "carteBancaire")]
+#[Route("/carte_bancaire")]
 class CarteBancaireController extends AbstractController
 {
     private CBService $cbService;
