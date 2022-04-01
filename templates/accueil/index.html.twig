@@ -55,11 +55,6 @@
     {% else %}
         <a href="{{ path('app_inscription') }}">Inscription</a>
         <a href="{{ path('login') }}">Connection</a>
-
-    {% endif %}
-
-    {% if Role == "admin" %}
-        <a href="{{ path('app_page_administrateur') }}">Database</a>
     {% endif %}
 
         <a class="category" href="{{ path('app_accueil')}}">Tout</a>
