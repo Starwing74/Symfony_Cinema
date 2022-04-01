@@ -84,7 +84,7 @@ class ReservationController extends AbstractController
             ]);
         }
 
-        return $this->render('carte_bancaire/add.html.twig', [
+        return $this->render('reservation/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }

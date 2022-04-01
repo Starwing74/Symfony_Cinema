@@ -57,7 +57,7 @@ class CarteBancaireController extends AbstractController
             $this->addFlash('error', 'Les informations entrées sont erronées ou la carte n\'est plus valide');
         }
 
-        return $this->render('carte_bancaire/edit.html.twig', [
+        return $this->render('carte_bancaire/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
