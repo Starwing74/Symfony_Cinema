@@ -3,93 +3,96 @@
 {% block title %}Hello AccueilController!{% endblock %}
 
 {% block body %}
-<style>
-    .film:hover{
-        width: 440px;
-        height: 540px;
-    }
+    <style>
+        .film.lazy-load.is-loaded {
+            opacity: 1;
+        }
+        .category{
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 1.75rem;
+            font-weight: 300;
+            line-height: 2.5rem;
+            color: #a1a4a7;
+            margin-right: 1rem;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            outline: none;
+            cursor: pointer;
+        }
+        .category:hover{
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 1.75rem;
+            line-height: 2.5rem;
+            margin-right: 1rem;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            outline: none;
+            cursor: pointer;
+            color: #1c2129;
+            font-weight: 400;
+        }
+    </style>
 
-    .film.lazy-load.is-loaded {
-        opacity: 1;
-    }
+    <div class="example-wrapper">
 
-    .category{
-        position: relative;
-        display: inline-block;
-        text-decoration: none;
-        font-size: 1.75rem;
-        font-weight: 300;
-        line-height: 2.5rem;
-        color: #a1a4a7;
-        margin-right: 1rem;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        outline: none;
-        cursor: pointer;
-    }
+        <h1 class="mx-2 mt-2 mb-5">Bienvenue au cinema de Grenoble</h1>
 
-    .category:hover{
-        position: relative;
-        display: inline-block;
-        text-decoration: none;
-        font-size: 1.75rem;
-        line-height: 2.5rem;
-        margin-right: 1rem;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        outline: none;
-        cursor: pointer;
-        color: #1c2129;
-        font-weight: 400;
-    }
-</style>
-
-<div class="example-wrapper">
-    <h1>Bienvenue au cinema de grenoble</h1>
-
-    {% if app.user %}
-        <p>bienvenue <a href="{{ path('app_carte_bancaire') }}">{{ app.user.name }}</a>!</p>
-        <a href="{{ path('logout') }}">deconnection</a>
-    {% else %}
-        <a href="{{ path('app_inscription') }}">Inscription</a>
-        <a href="{{ path('login') }}">Connection</a>
-    {% endif %}
-
-        <a class="category" href="{{ path('app_accueil')}}">Tout</a>
-    {% for Category in Category %}
-        <a class="category" href="{{ path('category', { id: Category.id})}}">{{ Category.type }}</a>
-    {% endfor %}
-
-    {{ form_start(form) }}
-    {{ form_rest(form) }}
-    <input type="submit" value="Valider" />
-    {{ form_end(form) }}
-
-    {% for Film in Films %}
-        <h1>{{ Film.name }}</h1>
-        <div>
-            <a href="{{ path('ResumerFilm', { id: Film.id})}})}}">
-                <img class="film" src="{{ Film.image }}">
-            </a>
-            <video href="{{ Film.bandeAnnonce }}"></video>
-            <a href="{{ path('app_horaire_film', {id: Film.id}) }}">Voir les séances</a>
-            {% if app.user %}
-                <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
-                    <img width="25" src="https://www.pinclipart.com/picdir/middle/552-5527327_heart-clipart-black-and-white-white-heart-clipart.png">
-                </a>
-                {% if reviewlist %}
-                    {% for reviewlist in reviewlist %}
-                        {% if reviewlist.film.id == Film.id and reviewlist.user.id == app.user.id %}
-                            <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
-                                <img width="25" style="position: relative;left: -28px; top: 0px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/1200px-Heart_coraz%C3%B3n.svg.png">
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endif %}
+        <div class="mx-3 my-3">
+            <a class="btn btn-warning" href="{{ path('app_accueil')}}">Tout</a>
+            {% for Category in Category %}
+                <a class="btn btn-warning" href="{{ path('category', { id: Category.id})}}">{{ Category.type }}</a>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
+
+        <div class="mx-3 my-3">
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+            <input type="submit" value="Valider" />
+            {{ form_end(form) }}
+
+        </div>
+
+        {% for Film in Films %}
+            <div class="card flex-row flex-wrap m-3 p-2">
+                <div class="card-header border-0">
+                    <a href="{{ path('ResumerFilm', { id: Film.id})}}">
+                        <img class="film" src="{{ Film.image }}">
+                    </a>
+                </div>
+                <div class="card-block px-2 w-75">
+                    <h2 class="card-title">{{ Film.name }}</h2>
+                    <p class="card-text">{{ Film.resumer }}</p>
+                    <a class="d-block" href="{{ path('ResumerFilm', { id: Film.id})}})}}">Fiche du film, bande annonce...</a>
+                    <br>
+                    <a href="{{ path('app_horaire_film', {id: Film.id}) }}" class="btn btn-primary mx-2">Voir les séances</a>
+                    {% if app.user %}
+                        <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
+                            <img width="25" src="https://www.pinclipart.com/picdir/middle/552-5527327_heart-clipart-black-and-white-white-heart-clipart.png">
+                        </a>
+                        {% if reviewlist %}
+                            {% set count = 0 %}
+                            {% for reviewlist in reviewlist %}
+                                {% if reviewlist.film.id == Film.id and reviewlist.user.id == app.user.id %}
+                                    <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
+                                        <img width="25" style="position: relative;left: -28px; top: 0px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/1200px-Heart_coraz%C3%B3n.svg.png">
+                                    </a>
+                                {% endif %}
+                                {% if reviewlist.film.id == Film.id %}
+                                    {% set count = count+1 %}
+                                {% endif %}
+                            {% endfor %}
+                            <span>{{ count }}</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="w-100"></div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -3,76 +3,76 @@
 {% block title %}Hello SalleSeanceController!{% endblock %}
 
 {% block body %}
-<style>
-    img{
-        width: 30px;
-        height: 30px;
-    }
+    <style>
+        img{
+            width: 30px;
+            height: 30px;
+        }
 
-    .prit{
-        width: 30px;
-        height: 30px;
-        filter: invert(80%) sepia(52%) saturate(7257%) hue-rotate(92deg) brightness(125%) contrast(107%);
-    }
+        .prit{
+            width: 30px;
+            height: 30px;
+            filter: invert(80%) sepia(52%) saturate(7257%) hue-rotate(92deg) brightness(125%) contrast(107%);
+        }
 
-    .encour{
-        width: 30px;
-        height: 30px;
-        filter: invert(99%) sepia(24%) saturate(7500%) hue-rotate(358deg) brightness(108%) contrast(103%);
-    }
+        .encour{
+            width: 30px;
+            height: 30px;
+            filter: invert(99%) sepia(24%) saturate(7500%) hue-rotate(358deg) brightness(108%) contrast(103%);
+        }
 
-    td{
-        padding: 10px;
-    }
-</style>
+        td{
+            padding: 10px;
+        }
+    </style>
 
-<div class="example-wrapper">
-    <h1>Salle de Séance</h1>
-    {% for siege in siege %}
-        {% if siege.status == "en cour" %}
-            <a href="{{ path('removeSelectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
-                <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+    <div class="example-wrapper">
+        <h1>Sélection des sièges</h1>
+        {% for siege in siege %}
+            {% if siege.status == "en cour" %}
+                <a href="{{ path('removeSelectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
+                    <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </a>
+            {% elseif siege.status == "libre" %}
+                <a href="{{ path('selectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
+                    <img src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </a>
+            {% elseif siege.status == "pris" %}
+                <a>
+                    <img class="prit" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </a>
+            {% endif %}
+            {% if siege.colonne == "7" %}
+                <br>
+            {% endif %}
+        {% endfor %}
+
+        <table>
+            <tbody>
+            <tr>
+                <td>Libre</td>
+                <td>En cours</td>
+                <td>Pris</td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </td>
+                <td>
+                    <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </td>
+                <td>
+                    <img class="prit" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button>
+            <a href="{{ path('app_payement', { salle: salle, seance: seance})}}">
+                Valider
             </a>
-        {% elseif siege.status == "libre" %}
-            <a href="{{ path('selectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
-                <img src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </a>
-        {% elseif siege.status == "pris" %}
-            <a>
-                <img class="prit" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </a>
-        {% endif %}
-        {% if siege.colonne == "7" %}
-            <br>
-        {% endif %}
-    {% endfor %}
+        </button>
 
-    <table>
-        <tbody>
-        <tr>
-            <td>Libre</td>
-            <td>En cour</td>
-            <td>prit</td>
-        </tr>
-        <tr>
-            <td>
-                <img src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </td>
-            <td>
-                <img class="encour" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </td>
-            <td>
-                <img class="prit" src="https://w7.pngwing.com/pngs/302/121/png-transparent-cinema-seat-chair-seat.png">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <button>
-        <a href="{{ path('app_payement', { salle: salle, seance: seance})}}">
-            Valider
-        </a>
-    </button>
-
-</div>
+    </div>
 {% endblock %}
