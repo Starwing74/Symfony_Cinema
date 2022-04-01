@@ -48,9 +48,17 @@ class PageAdministrateurController extends AbstractController
             return $this->redirectToRoute("app_page_administrateur");
         }
 
+        if($this->getUser())
+        {
+            $role = $this->getUser()->getRoles()[0];
+        }
+        else{
+            $role = null;
+        }
+
         return $this->render('page_administrateur/index.html.twig', [
             'controller_name' => 'PageAdministrateurController',
-            'Role' => $this->getUser()->getRoles()[0],
+            'Role' => $role,
             'film' => $filmRepository->findAll(),
             'form' => $form->createView()
         ]);
