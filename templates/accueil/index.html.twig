@@ -73,10 +73,21 @@
             <a href="{{ path('ResumerFilm', { id: Film.id})}})}}">
                 <img class="film" src="{{ Film.image }}">
             </a>
-            <button><a href="{{ Film.bandeAnnonce }}">Bande annonce</a></button>
+            <video href="{{ Film.bandeAnnonce }}"></video>
             <a href="{{ path('app_horaire_film', {id: Film.id}) }}">Voir les séances</a>
             {% if app.user %}
-                <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">like</a>
+                <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
+                    <img width="25" src="https://www.pinclipart.com/picdir/middle/552-5527327_heart-clipart-black-and-white-white-heart-clipart.png">
+                </a>
+                {% if reviewlist %}
+                    {% for reviewlist in reviewlist %}
+                        {% if reviewlist.film.id == Film.id and reviewlist.user.id == app.user.id %}
+                            <a href="{{ path('likefilm', {idfilm: Film.id, iduser: app.user.id}) }}">
+                                <img width="25" style="position: relative;left: -28px; top: 0px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/1200px-Heart_coraz%C3%B3n.svg.png">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </div>
     {% endfor %}
