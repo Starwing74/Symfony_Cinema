@@ -31,21 +31,12 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute("SearchFilm" , ['search'=> $dto->FilmSearch]);
         }
 
-        if($this->getUser())
-        {
-            $role = $this->getUser()->getRoles()[0];
-        }
-        else{
-            $role = null;
-        }
-
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'Category' => $categoryRepository->findAll(),
             'Films' => $filmRepository->findAll(),
             'form' => $form->createView(),
-            'reviewlist' => $reviewRepository->findAll(),
-            'Role' => $role,
+            'reviewlist' => $reviewRepository->findAll()
         ]);
     }
 
@@ -64,21 +55,12 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute("SearchFilm" , ['search'=> $dto->FilmSearch]);
         }
 
-        if($this->getUser())
-        {
-            $role = $this->getUser()->getRoles()[0];
-        }
-        else{
-            $role = null;
-        }
-
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'Category' => $categoryRepository->findAll(),
             'Films' => $filmRepository->findBy(['name'=>$search]),
             'form' => $form->createView(),
-            'reviewlist' => $reviewRepository->findAll(),
-            'Role' => $role,
+            'reviewlist' => $reviewRepository->findAll()
         ]);
     }
 
@@ -97,21 +79,12 @@ class AccueilController extends AbstractController
             return $this->redirectToRoute("SearchFilm" , ['search'=> $dto->FilmSearch]);
         }
 
-        if($this->getUser())
-        {
-            $role = $this->getUser()->getRoles()[0];
-        }
-        else{
-            $role = null;
-        }
-
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'Category' => $categoryRepository->findAll(),
             'Films' => $filmRepository->findBy(['category'=>$category->getId()]),
             'form' => $form->createView(),
-            'reviewlist' => $reviewRepository->findAll(),
-            'Role' => $role,
+            'reviewlist' => $reviewRepository->findAll()
         ]);
     }
 
