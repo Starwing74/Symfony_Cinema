@@ -27,7 +27,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Salle de Séance</h1>
+    <h1>Sélection des sièges</h1>
     {% for siege in siege %}
         {% if siege.status == "en cour" %}
             <a href="{{ path('removeSelectPlace', { salle: siege.salle.id, seance: siege.seance.id, numeroSiege: siege.numeroSiege })}}">
@@ -51,8 +51,8 @@
         <tbody>
         <tr>
             <td>Libre</td>
-            <td>En cour</td>
-            <td>prit</td>
+            <td>En cours</td>
+            <td>Pris</td>
         </tr>
         <tr>
             <td>

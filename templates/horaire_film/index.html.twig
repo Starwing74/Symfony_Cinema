@@ -6,23 +6,29 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    .button-retour{
+        width: 20px;
+        height: 20px;
+    }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <a href="{{ path('app_accueil')}}">
+        <img class="button-retour" src="https://icones.pro/wp-content/uploads/2021/02/fleches-iconela-gauche-orange.png">
+    </a>
+    <h1>{{ film.name }}</h1>
+    <img src="{{ film.image }}">
 
-    <a href="{{ path("app_accueil") }}">Retour</a>
-
-    {% for film in film %}
-        <p>{{ film.name }}</p>
-        <img src="{{ film.image }}">
-    {% endfor %}
-
+    <div class="my-3">
     {% for seance in seance %}
-        <p>{{ seance.langue }}</p>
-        <p>{{ seance.jourHoraire.format('m') }} / {{ seance.jourHoraire.format('j') }}</p>
-        <p><a href="{{ path('app_salle_seance', {salle: seance.salle.id, seance: seance.id})}}">{{ seance.jourHoraire.format('h') }} : {{ seance.jourHoraire.format('i') }}</a></p>
+            <div class="d-inline-block mx-3">
+                <p>{{ seance.langue }}</p>
+                <p>{{ seance.jourHoraire.format('m') }} / {{ seance.jourHoraire.format('j') }}</p>
+                <p><a href="{{ path('app_salle_seance', {salle: seance.salle.id, seance: seance.id})}}">{{ seance.jourHoraire.format('h') }} : {{ seance.jourHoraire.format('i') }}</a></p>
+            </div>
     {% endfor %}
+    </div>
 
 </div>
 {% endblock %}
