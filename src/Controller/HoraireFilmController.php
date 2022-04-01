@@ -17,7 +17,7 @@ class HoraireFilmController extends AbstractController
         return $this->render('horaire_film/index.html.twig', [
             'controller_name' => 'HoraireFilmController',
             'seance' => $seanceRepository->findBy(['film'=>$id]),
-            'film' => $filmRepository->findBy(['id'=>$id])
+            'film' => $filmRepository->find($id)
         ]);
     }
 }
