@@ -11,16 +11,16 @@
 </style>
 
 <div class="example-wrapper">
+    <h1>Resumer</h1>
+
     <a href="{{ path('app_accueil')}}">
         <img class="button-retour" src="https://icones.pro/wp-content/uploads/2021/02/fleches-iconela-gauche-orange.png">
     </a>
 
-    <h1 class="my-4">Resumé et bande-annonce</h1>
-
     {% for FilmResumer in FilmResumer %}
     <center>
-        <h6 class="my-3">{{ FilmResumer.resumer }}</h6>
-        <iframe width="560" height="315" src="{{ FilmResumer.bandeAnnonce }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <h1>{{ FilmResumer.resumer }}</h1>
+        <img src="{{ FilmResumer.image }}">
     </center>
     {% endfor %}
 

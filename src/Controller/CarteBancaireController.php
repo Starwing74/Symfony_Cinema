@@ -23,16 +23,13 @@ class CarteBancaireController extends AbstractController
     }
 
     #[Route('/', name: 'app_carte_bancaire')]
-    public function index(CarteBancaireRepository $carteBancaireRepository, Request $request): Response
+    public function index(CarteBancaireRepository $carteBancaireRepository): Response
     {
         $user = $this->getUser();
         $cartes = $user->getCarteBancaires($carteBancaireRepository);
-        $inTunnel = ($request->getSession()->get('reservationSeance', []) !== []);
-
         return $this->render('carte_bancaire/index.html.twig', [
             'controller_name' => 'CarteBancaireController',
-            'cartes' => $cartes,
-            'in_tunnel' => $inTunnel
+            'cartes' => $cartes
         ]);
     }
 
@@ -54,7 +51,7 @@ class CarteBancaireController extends AbstractController
             $this->addFlash('success', 'Carte Bancaire ajoutée!');
 
             return $this->redirectToRoute('app_carte_bancaire', [
-                'user' => $this->getUser(),
+                'user' => $this->getUser()
             ]);
         } else {
             $this->addFlash('error', 'Les informations entrées sont erronées ou la carte n\'est plus valide');
