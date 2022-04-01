@@ -17,6 +17,11 @@
         <a class="mx-3" href="{{ path('app_inscription') }}">Inscription</a>
         <a class="mx-3" href="{{ path('login') }}">Connection</a>
     {% endif %}
+
+
+    {% if app.user %}
+        <a class="mx-3" href="{{ path('app_page_administrateur') }}">Base de donnée</a>
+    {% endif %}
 </nav>
 {% block body %}{% endblock %}
 
